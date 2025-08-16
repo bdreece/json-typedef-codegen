@@ -36,7 +36,10 @@ impl jtd_codegen::target::Target for Target {
 
     fn strategy(&self) -> target::Strategy {
         target::Strategy {
-            file_partitioning: target::FilePartitioningStrategy::SingleFile("index.ts".into()),
+            file_partitioning: target::FilePartitioningStrategy::FilePerType(
+                "ts".into(),
+                Some(inflect::Case::kebab_case()),
+            ),
             enum_member_naming: target::EnumMemberNamingStrategy::Modularized,
             optional_property_handling: target::OptionalPropertyHandlingStrategy::NativeSupport,
             booleans_are_nullable: false,
