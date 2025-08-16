@@ -128,6 +128,15 @@ impl Case {
         )
     }
 
+    pub fn kebab_case() -> Self {
+        Self::new(
+            CaseCapitalization::None,
+            CaseCapitalization::None,
+            Some('-'),
+            BTreeSet::new(),
+        )
+    }
+
     pub fn pascal_case() -> Self {
         Self::new(
             CaseCapitalization::Initial,
