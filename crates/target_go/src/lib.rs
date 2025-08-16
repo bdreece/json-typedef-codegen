@@ -38,11 +38,12 @@ lazy_static! {
 
 pub struct Target {
     package: String,
+    ext: String,
 }
 
 impl Target {
-    pub fn new(package: String) -> Self {
-        Self { package }
+    pub fn new(package: String, ext: String) -> Self {
+        Self { package, ext }
     }
 }
 
@@ -52,7 +53,7 @@ impl jtd_codegen::target::Target for Target {
     fn strategy(&self) -> target::Strategy {
         target::Strategy {
             file_partitioning: target::FilePartitioningStrategy::FilePerType(
-                "go".into(),
+                self.ext.clone(),
                 Some(inflect::Case::snake_case()),
             ),
             enum_member_naming: target::EnumMemberNamingStrategy::Unmodularized,
@@ -392,12 +393,15 @@ fn doc(ident: usize, s: &str) -> String {
 #[cfg(test)]
 mod tests {
     mod std_tests {
-        jtd_codegen_test::std_test_cases!(&crate::Target::new("jtd_codegen_e2e".into()));
+        jtd_codegen_test::std_test_cases!(&crate::Target::new(
+            "jtd_codegen_e2e".into(),
+            "go".into()
+        ));
     }
 
     mod optional_std_tests {
         jtd_codegen_test::strict_std_test_case!(
-            &crate::Target::new("jtd_codegen_e2e".into()),
+            &crate::Target::new("jtd_codegen_e2e".into(), "go".into()),
             empty_and_nonascii_enum_values
         );
     }
