@@ -47,7 +47,7 @@ pub struct Strategy {
 
 #[derive(Debug)]
 pub enum FilePartitioningStrategy {
-    FilePerType(String),
+    FilePerType(String, Option<inflect::Case>),
     SingleFile(String),
 }
 

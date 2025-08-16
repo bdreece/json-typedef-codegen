@@ -432,25 +432,25 @@ impl<'a, T: Target> CodeGenerator<'a, T> {
             state: T::FileState::default(),
         };
 
-        let mut sub_file_data = match self.strategy.file_partitioning {
-            FilePartitioningStrategy::FilePerType(_) => &mut default_file_data,
+        let sub_file_data = match self.strategy.file_partitioning {
+            FilePartitioningStrategy::FilePerType(_, _) => &mut default_file_data,
             FilePartitioningStrategy::SingleFile(_) => file_data,
         };
 
-        let returned_name = f(&mut sub_file_data)?;
+        let returned_name = f(sub_file_data)?;
 
         match (&self.strategy.file_partitioning, returned_name) {
             // If we're generating a file per type, and the target did not
             // return a prefab name, then we need to generate a new file with
             // the contents of what the target generated.
-            (&FilePartitioningStrategy::FilePerType(_), None) => {
-                self.write_file(&mut sub_file_data, &sub_name)?;
+            (&FilePartitioningStrategy::FilePerType(_, _), Option::None) => {
+                self.write_file(sub_file_data, &sub_name)?;
                 Ok(sub_name)
             }
 
             // If instead we're in single-file mode (but again with no prefab
             // name), then we don't need to write out a file.
-            (&FilePartitioningStrategy::SingleFile(_), None) => Ok(sub_name),
+            (&FilePartitioningStrategy::SingleFile(_), Option::None) => Ok(sub_name),
 
             // If a prefab name was returned, then in no circumstance do we
             // write out a file, and we will have the rest of codegen use the
@@ -461,8 +461,14 @@ impl<'a, T: Target> CodeGenerator<'a, T> {
 
     fn write_file(&self, file_data: &mut FileData<T::FileState>, type_name: &str) -> Result<()> {
         let file_name = match self.strategy.file_partitioning {
-            FilePartitioningStrategy::FilePerType(ref extension) => {
-                Path::new(type_name).with_extension(extension)
+            FilePartitioningStrategy::FilePerType(ref extension, ref case) => {
+                let owned = type_name.to_string();
+                let file_stem = case
+                    .as_ref()
+                    .map(|c| c.inflect(std::slice::from_ref(&owned)))
+                    .unwrap_or(owned);
+
+                Path::new(&file_stem).with_extension(extension)
             }
             FilePartitioningStrategy::SingleFile(ref file_name) => {
                 Path::new(file_name).to_path_buf()

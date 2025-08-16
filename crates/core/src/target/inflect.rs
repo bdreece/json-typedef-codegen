@@ -96,6 +96,7 @@ fn decompose(s: &str) -> Vec<String> {
         .collect()
 }
 
+#[derive(Debug)]
 pub struct Case {
     first_capitalization: CaseCapitalization,
     rest_capitalization: CaseCapitalization,
@@ -164,7 +165,7 @@ impl Case {
     }
 
     pub fn inflect(&self, words: &[String]) -> String {
-        let mut word_parts: Vec<_> = words.into_iter().flat_map(|word| decompose(word)).collect();
+        let mut word_parts: Vec<_> = words.iter().flat_map(|word| decompose(word)).collect();
 
         // If after decomposing the word into its parts (and after the
         // associated stripping of non-ASCII alphanumerics) we don't have any
@@ -195,6 +196,7 @@ impl Case {
     }
 }
 
+#[derive(Debug)]
 pub enum CaseCapitalization {
     None,
     Initial,
