@@ -51,10 +51,10 @@ impl jtd_codegen::target::Target for Target {
 
     fn strategy(&self) -> target::Strategy {
         target::Strategy {
-            file_partitioning: target::FilePartitioningStrategy::SingleFile(format!(
-                "{}.go",
-                PACKAGE_NAMING_CONVENTION.inflect(&[self.package.clone()]),
-            )),
+            file_partitioning: target::FilePartitioningStrategy::FilePerType(
+                "go".into(),
+                Some(inflect::Case::snake_case()),
+            ),
             enum_member_naming: target::EnumMemberNamingStrategy::Unmodularized,
             optional_property_handling: target::OptionalPropertyHandlingStrategy::WrapWithNullable,
             booleans_are_nullable: false,
