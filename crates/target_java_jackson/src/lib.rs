@@ -45,7 +45,7 @@ impl jtd_codegen::target::Target for Target {
 
     fn strategy(&self) -> target::Strategy {
         target::Strategy {
-            file_partitioning: target::FilePartitioningStrategy::FilePerType("java".into()),
+            file_partitioning: target::FilePartitioningStrategy::FilePerType("java".into(), None),
             enum_member_naming: target::EnumMemberNamingStrategy::Modularized,
             optional_property_handling: target::OptionalPropertyHandlingStrategy::WrapWithNullable,
             booleans_are_nullable: true,
