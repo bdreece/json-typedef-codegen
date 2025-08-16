@@ -67,8 +67,9 @@ fn main() -> Result<()> {
         log.start("Go", out_dir);
 
         let package = matches.value_of("go-package").unwrap().to_owned();
+        let ext = matches.value_of("go-ext").unwrap_or("go").to_owned();
 
-        let target = jtd_codegen_target_go::Target::new(package);
+        let target = jtd_codegen_target_go::Target::new(package, ext);
 
         let codegen_info =
             jtd_codegen::codegen(&target, root_name.clone(), &schema, &Path::new(out_dir))

@@ -42,6 +42,11 @@ args:
       value_name: dir
       requires:
         - go-package
+  - go-ext:
+      help: File extension for Go generated sources
+      long: go-ext
+      takes_value: true
+      value_name: ext
   - go-package:
       help: Package for Go generated types
       long: go-package
