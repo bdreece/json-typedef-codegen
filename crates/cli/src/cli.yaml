@@ -110,3 +110,8 @@ args:
       long: typescript-out
       takes_value: true
       value_name: dir
+  - typescript-ext:
+      help: File extension for TypeScript generated sources
+      long: typescript-ext
+      takes_value: true
+      value_name: ext

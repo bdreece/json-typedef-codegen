@@ -146,7 +146,12 @@ fn main() -> Result<()> {
     if let Some(out_dir) = matches.value_of("typescript-out") {
         log.start("TypeScript", out_dir);
 
-        let target = jtd_codegen_target_typescript::Target::new();
+        let ext = matches
+            .value_of("typescript-ext")
+            .unwrap_or("ts")
+            .to_owned();
+
+        let target = jtd_codegen_target_typescript::Target::new(ext);
 
         let codegen_info =
             jtd_codegen::codegen(&target, root_name.clone(), &schema, &Path::new(out_dir))
