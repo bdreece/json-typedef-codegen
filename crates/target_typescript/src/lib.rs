@@ -23,11 +23,13 @@ lazy_static! {
         ));
 }
 
-pub struct Target {}
+pub struct Target {
+    ext: String,
+}
 
 impl Target {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(ext: String) -> Self {
+        Self { ext }
     }
 }
 
@@ -37,7 +39,7 @@ impl jtd_codegen::target::Target for Target {
     fn strategy(&self) -> target::Strategy {
         target::Strategy {
             file_partitioning: target::FilePartitioningStrategy::FilePerType(
-                "ts".into(),
+                self.ext.clone(),
                 Some(inflect::Case::kebab_case()),
             ),
             enum_member_naming: target::EnumMemberNamingStrategy::Modularized,
@@ -324,17 +326,17 @@ fn doc(ident: usize, s: &str) -> String {
 #[cfg(test)]
 mod tests {
     mod std_tests {
-        jtd_codegen_test::std_test_cases!(&crate::Target::new());
+        jtd_codegen_test::std_test_cases!(&crate::Target::new("ts".into()));
     }
 
     mod optional_std_tests {
         jtd_codegen_test::strict_std_test_case!(
-            &crate::Target::new(),
+            &crate::Target::new("ts".into()),
             empty_and_nonascii_properties
         );
 
         jtd_codegen_test::strict_std_test_case!(
-            &crate::Target::new(),
+            &crate::Target::new("ts".into()),
             empty_and_nonascii_enum_values
         );
     }
